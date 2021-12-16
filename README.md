@@ -1,2 +1,3 @@
-# -flowi-ecs
-Flowi Entity Component System
+# @flowi/ecs
+
+**This Project is a WIP**
