@@ -6,6 +6,6 @@ describe('example test', () => {
 
     const value = 'hello world';
 
-    expect(value).toBe(value);
+    expect(func(value)).toBe(value);
   });
 });

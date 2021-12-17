@@ -1,12 +1,10 @@
 /**
- * Return the provided value.
+ * Example function.
  *
  * @public
- * @param value - Value to return.
- * @returns - The value provided.
+ * @param value - The value to return.
+ * @returns - The provided value.
  */
-const func = (value: string): string => {
-  return value;
-};
+const func = (value: string): string => value;
 
 export default func;
