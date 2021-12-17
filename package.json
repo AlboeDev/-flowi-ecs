@@ -8,13 +8,20 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "docs:build": "api-documenter markdown -i ./docs/data -o ./docs",
+    "docs:clean": "rimraf ./docs",
+    "docs:extract": "api-extractor run -c ./config/api-extractor.config.json",
     "prepare": "husky install config/husky",
-    "transpile": "tsc"
+    "dist:build": "tsc",
+    "dist:clean": "rimraf ./dist"
   },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
+    "@microsoft/api-documenter": "^7.13.77",
+    "@microsoft/api-extractor": "^7.19.2",
     "husky": "^7.0.4",
+    "rimraf": "^3.0.2",
     "typescript": "^4.5.4"
   }
 }
