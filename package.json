@@ -1,18 +1,20 @@
 {
-  "name": "@flowi/ecs",
+  "name": "@flowi/core",
   "version": "0.0.0",
-  "description": "Flowi Entity Component System",
-  "main": "dist/index.js",
+  "description": "Flowi Core",
+  "main": "./dist/index.js",
   "repository": "git@github.com:AlboeDev/flowi-ecs.git",
   "author": "Alboe Development",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "prepare": "husky install config/husky"
+    "prepare": "husky install config/husky",
+    "transpile": "tsc"
   },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
-    "husky": "^7.0.4"
+    "husky": "^7.0.4",
+    "typescript": "^4.5.4"
   }
 }
