@@ -1,0 +1,21 @@
+{
+  "apiReport": {
+    "enabled": true,
+    "reportFileName": "<unscopedPackageName>.api.md",
+    "reportFolder": "<projectFolder>/docs/data/",
+    "reportTempFolder": "<projectFolder>/docs/data/"
+  },
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.json"
+  },
+  "docModel": {
+    "enabled": true,
+    "apiJsonFilePath": "<projectFolder>/docs/data/<unscopedPackageName>.api.json"
+  },
+  "dtsRollup": {
+    "enabled": true,
+    "untrimmedFilePath": "<projectFolder>/docs/data/<unscopedPackageName>.d.ts"
+  },
+  "mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+  "projectFolder": "../"
+}
