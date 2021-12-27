@@ -8,12 +8,16 @@
     "module": "es6",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "./dist",
+    "outDir": "./dist/raw",
     "preserveConstEnums": true,
     "removeComments": false,
     "sourceMap": true,
     "target": "es6"
   },
+  "exclude": [
+    "./src/**/*.test.ts",
+    "./src/**/*.fixture.ts"
+  ],
   "include": [
     "./src/**/*.ts"
   ]
