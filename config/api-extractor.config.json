@@ -16,6 +16,6 @@
     "enabled": true,
     "untrimmedFilePath": "<projectFolder>/docs/data/<unscopedPackageName>.d.ts"
   },
-  "mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+  "mainEntryPointFilePath": "<projectFolder>/dist/raw/index.d.ts",
   "projectFolder": "../"
 }
