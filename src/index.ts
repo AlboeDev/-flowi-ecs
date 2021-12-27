@@ -1,10 +1,5 @@
-/**
- * Example function.
- *
- * @public
- * @param value - The value to return.
- * @returns - The provided value.
- */
-const func = (value: string): string => value;
+import { Component } from './models';
 
-export default func;
+export {
+  Component,
+};
