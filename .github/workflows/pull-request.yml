@@ -23,9 +23,6 @@ jobs:
           HAS_VALIDATED_LABEL=${{ contains(github.event.pull_request.labels.*.name, 'validated') }}
           VALIDATED=0; [ "$HAS_VALIDATED_LABEL" == "true" ] && VALIDATED=1
 
-          echo from base $FROM_BASE
-          echo validated $VALIDATED
-
           if [[ $FROM_BASE == 1 || $VALIDATED == 1 ]]
           then
             echo 'pull request is validated, running ci'
@@ -116,7 +113,7 @@ jobs:
           path: node_modules/
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Test Source
+      - name: Test Static
         run: yarn test:static
 
   test-transpile:
