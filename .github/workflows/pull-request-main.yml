@@ -1,0 +1,39 @@
+name: Pull Request [ main ] CI
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types: [opened]
+
+jobs:
+  validate:
+    name: Check - Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate
+        id: validation
+        run: |
+          HEAD_REPO=${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO=${{ github.event.pull_request.base.repo.full_name }}
+          FROM_BASE=0; [ "$HEAD_REPO" == "$BASE_REPO" ] && FROM_BASE=1
+
+          HEAD_REF=${{ github.event.pull_request.head.ref }}
+          FROM_NEXT=0; [ "$HEAD_REF" == "next" ] && FROM_NEXT=1
+
+          if [[ $FROM_BASE == 1 && $FROM_NEXT == 1 ]]
+          then
+            echo 'pull request is valid'
+            echo "::set-output name=valid_pull_request::1"
+          else
+            echo 'pull request is not valid'
+            echo "::set-output name=valid_pull_request::0"
+          fi
+
+      - name: Close Pull Request
+        if: ${{ steps.validation.outputs.valid_pull_request }} == 0
+        uses: superbrothers/close-pull-request@v3
+        with:
+          comment: "Pull Requests against the `main` branch are not permitted. Please open a Pull Request against the `next` branch instead."
+
+

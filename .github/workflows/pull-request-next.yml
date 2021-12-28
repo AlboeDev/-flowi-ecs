@@ -1,9 +1,9 @@
-name: Pull Request CI
+name: Pull Request [ next ] CI
 
 on:
   pull_request_target:
     branches:
-      - main
+      - next
     types: [opened, labeled, reopened, synchronize]
 
 env:
