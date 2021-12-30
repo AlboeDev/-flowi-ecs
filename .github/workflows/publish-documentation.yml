@@ -1,0 +1,175 @@
+name: Deploy Documentation CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  RID: ${{ github.run_id }}-${{ github.run_number }}
+
+jobs:
+  check-validation:
+    name: Check - Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Validation
+        run: |
+          HEAD_REPO=${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO=${{ github.event.pull_request.base.repo.full_name }}
+          FROM_BASE=0; [ "$HEAD_REPO" == "$BASE_REPO" ] && FROM_BASE=1
+
+          HAS_VALIDATED_LABEL=${{ contains(github.event.pull_request.labels.*.name, 'validated') }}
+          VALIDATED=0; [ "$HAS_VALIDATED_LABEL" == "true" ] && VALIDATED=1
+
+          if [[ $FROM_BASE == 1 || $VALIDATED == 1 ]]
+          then
+            echo 'pull request is validated, running ci'
+            exit 0
+          else
+            echo 'pull request is not validated, exiting'
+            exit 1
+          fi
+
+  initialize:
+    name: Initialize
+    needs: check-validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          check-latest: true
+
+      - name: Validate Dependencies
+        id: validate-dependencies
+        uses: actions/cache@v2
+        with:
+          path: node_modules/
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Dependencies
+        if: steps.validate-dependencies.outputs.cache-hit != 'true'
+        run: yarn
+
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        if: steps.validate-dependencies.outputs.cache-hit != 'true'
+        with:
+          path: node_modules/
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+  transpile:
+    name: Test - Transpile
+    needs: initialize
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: Setup Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          check-latest: true
+
+      - name: Uncache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: node_modules/
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Distributable - Raw
+        run: yarn dist:raw
+
+      - name: Cache Dist
+        uses: actions/cache@v2
+        with:
+          path: dist/
+          key: dist-${{ runner.os }}-${{ env.RID }}
+
+  generate-documentation:
+    name: Test - Documentation
+    needs: transpile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          check-latest: true
+
+      - name: Uncache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: node_modules/
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Uncache Dist
+        uses: actions/cache@v2
+        with:
+          path: dist/
+          key: dist-${{ runner.os }}-${{ env.RID }}
+
+      - name: Documentation - Extract
+        run: yarn docs:extract
+
+      - name: Documentation - Build
+        run: yarn docs:build
+
+      - name: Cache Docs
+        uses: actions/cache@v2
+        with:
+          path: docs/
+          key: docs-${{ runner.os }}-${{ env.RID }}
+
+  deploy-documentation:
+    name: Deploy - Documentation
+    needs: generate-documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        with:
+          ref: documentation
+
+      - name: Clean Documentation
+        run: |
+          rm -rf ./docs
+
+      - name: Uncache Documentation
+        uses: actions/cache@v2
+        with:
+          path: docs/
+          key: docs-${{ runner.os }}-${{ env.rid }}
+
+      - name: Deploy Documentation
+        run: |
+          git config --global user.name "Automation"
+          git config --global user.email "automation@alboe.dev"
+          git add ./docs
+          FILE_COUNT=$(git status -s | wc -l | xargs)
+          if [[ $FILE_COUNT != '0' ]]
+          then
+            echo "Found $FILE_COUNT changed documentation files."
+            echo "Publishing documentation changes."
+            git commit -m "ci(docs): deploy documentation [skip ci]"
+            git push origin documentation
+          else
+            echo "Documentation files have not changed."
+            echo "Documentation will not be published."
+          fi
