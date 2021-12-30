@@ -31,7 +31,7 @@ jobs:
           fi
 
       - name: Close Pull Request
-        if: ${{ steps.validation.outputs.valid_pull_request }} == 0
+        if: ${{ steps.validation.outputs.valid_pull_request == 0 }}
         uses: superbrothers/close-pull-request@v3
         with:
           comment: "Pull Requests against the `main` branch are not permitted. Please open a Pull Request against the `next` branch instead."
