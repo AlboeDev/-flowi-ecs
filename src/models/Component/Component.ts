@@ -39,7 +39,7 @@ abstract class Component {
   public constructor(serial?: Serial) {
     Object.defineProperties(this, {
       uuid: {
-        value: serial?.uuid || randomUUID(),
+        value: serial?.uuid || randomUUID().toUpperCase(),
       },
     });
   }
