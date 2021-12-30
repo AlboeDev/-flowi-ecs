@@ -145,7 +145,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: dist/
-          key: dist-${{ runner.os }}-${{ env.rid }}
+          key: dist-${{ runner.os }}-${{ env.RID }}
 
   test-documentation:
     name: Test - Documentation
@@ -173,7 +173,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: dist/
-          key: dist-${{ runner.os }}-${{ env.rid }}
+          key: dist-${{ runner.os }}-${{ env.RID }}
 
       - name: Documentation - Extract
         run: yarn docs:extract
@@ -207,7 +207,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: dist/
-          key: dist-${{ runner.os }}-${{ env.rid }}
+          key: dist-${{ runner.os }}-${{ env.RID }}
 
       - name: Distributable - Main
         run: yarn dist:main
