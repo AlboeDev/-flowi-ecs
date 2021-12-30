@@ -12,7 +12,6 @@ env:
 jobs:
   initialize:
     name: Initialize
-    needs: check-validation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
