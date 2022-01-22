@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-import { Serial } from './Component.types';
+import type { Serial } from './Component.types';
 
 /**
  * Abstract Component class. This class is part of the ECS subsystem.
@@ -42,6 +42,15 @@ abstract class Component {
         value: serial?.uuid || randomUUID().toUpperCase(),
       },
     });
+  }
+
+  /**
+   * The type of this component.
+   *
+   * @readonly
+   */
+  public get type(): string {
+    return this.constructor.name;
   }
 }
 
