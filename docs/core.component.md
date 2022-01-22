@@ -36,5 +36,6 @@ class ComponentName extends Component {
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [type](./core.component.type.md) |  | string | The type of this component. |
 |  [uuid](./core.component.uuid.md) |  | string | UUID for this Component. |
 

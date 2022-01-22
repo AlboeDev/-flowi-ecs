@@ -9,4 +9,5 @@
 |  Class | Description |
 |  --- | --- |
 |  [Component](./core.component.md) | Abstract Component class. This class is part of the ECS subsystem. |
+|  [Entity](./core.entity.md) | Entity class. This class is a part of the ECS subsystem. |
 
