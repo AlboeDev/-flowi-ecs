@@ -8,7 +8,7 @@
     "module": "es6",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "./dist/raw",
+    "outDir": "./dist/loose",
     "preserveConstEnums": true,
     "removeComments": false,
     "sourceMap": true,
