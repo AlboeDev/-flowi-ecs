@@ -4,11 +4,19 @@ import { terser } from 'rollup-plugin-terser';
 
 export default [
   {
-    input: 'dist/raw/index.js',
+    input: 'dist/loose/index.js',
     output: [
       {
+        format: 'cjs',
+        file: 'dist/cjs/index.js',
+        globals: {
+          crypto: 'crypto',
+        },
+        sourcemap: true,
+      },
+      {
         format: 'es',
-        file: 'dist/module/index.js',
+        file: 'dist/esm/index.js',
         globals: {
           crypto: 'crypto',
         },
@@ -16,7 +24,7 @@ export default [
       },
       {
         format: 'umd',
-        file: 'dist/bundle/index.js',
+        file: 'dist/umd/index.js',
         globals: {
           crypto: 'crypto',
         },
@@ -31,20 +39,24 @@ export default [
     watch: {
       buildDelay: 1000,
       include: [
-        './dist/raw/**/*.js',
+        './dist/loose/**/*.js',
       ],
     },
   },
   {
-    input: 'dist/raw/index.d.ts',
+    input: 'dist/loose/index.d.ts',
     output: [
       {
+        format: 'cjs',
+        file: 'dist/cjs/index.d.ts',
+      },
+      {
         format: 'es',
-        file: 'dist/module/index.d.ts',
+        file: 'dist/esm/index.d.ts',
       },
       {
         format: 'umd',
-        file: 'dist/bundle/index.d.ts',
+        file: 'dist/umd/index.d.ts',
       },
     ],
     plugins: [
@@ -53,7 +65,7 @@ export default [
     watch: {
       buildDelay: 1000,
       include: [
-        './dist/raw/**/*.d.ts',
+        './dist/loose/**/*.d.ts',
       ],
     },
   },
