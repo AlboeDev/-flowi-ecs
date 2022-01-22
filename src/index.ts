@@ -1,5 +1,6 @@
-import { Component } from './models';
+import { Component, Entity } from './models';
 
 export {
   Component,
+  Entity,
 };
