@@ -65,8 +65,8 @@ jobs:
           path: node_modules/
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Distributable - Raw
-        run: yarn dist:raw
+      - name: Build - Loose
+        run: yarn build:loose
 
       - name: Cache Dist
         uses: actions/cache@v2
@@ -102,11 +102,11 @@ jobs:
           path: dist/
           key: dist-${{ runner.os }}-${{ env.RID }}
 
-      - name: Documentation - Extract
-        run: yarn docs:extract
+      - name: Build - Docs Data
+        run: yarn build:docs:data
 
-      - name: Documentation - Build
-        run: yarn docs:build
+      - name: Build - Docs Dist
+        run: yarn build:docs:dist
 
       - name: Cache Docs
         uses: actions/cache@v2
